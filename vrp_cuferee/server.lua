@@ -31,8 +31,7 @@ function displaychei(value)
 end
 
 function vRPcufere.getchei(user_id)
-	local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local chei = tonumber(tmpchei[user_id])
 	if chei ~= nil then
 		return tonumber(tmpchei[user_id])
@@ -42,8 +41,7 @@ function vRPcufere.getchei(user_id)
 end
 
 function vRPcufere.setchei(user_id,value)
-	local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local chei = tonumber(tmpchei[user_id])
 	if chei ~= nil then
 		tmpchei[user_id] = tonumber(value)
@@ -56,16 +54,14 @@ function vRPcufere.setchei(user_id,value)
 end
 
 function vRPcufere.givechei(user_id,amount)
-	local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local chei = vRPcufere.getchei(user_id)
 	local newchei = chei + amount
 	vRPcufere.setchei(user_id,newchei)
 end
 
 function vRPcufere.takechei(user_id,amount)
-	local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local chei = vRPcufere.getchei(user_id)
 	local newchei = chei - amount
 	print(newchei)
@@ -73,8 +69,7 @@ function vRPcufere.takechei(user_id,amount)
 end
 
 function vRPcufere.trycheiPayment(user_id,amount)
-	local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local chei = vRPcufere.getchei(user_id)
 	if chei >= amount then
 		vRPcufere.setchei(user_id,chei-amount)
@@ -85,8 +80,7 @@ function vRPcufere.trycheiPayment(user_id,amount)
 end
 
 AddEventHandler("vRP:playerJoin",function(user_id,source,name,last_login)
-		local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local cfg = getcheiConfig()
 	MySQL.execute("vRP/chei_init_user", {user_id = user_id, chei = cfg.open_chei}, function(affected)
 		MySQL.query("vRP/get_chei", {user_id = user_id}, function(rows, affected)
@@ -98,8 +92,7 @@ AddEventHandler("vRP:playerJoin",function(user_id,source,name,last_login)
 end)
 
 AddEventHandler("vRP:playerLeave",function(user_id,source)
-		local user_id = vRP.getUserId({source})
-    local player = vRP.getUserSource({user_id})
+
 	local chei = tmpchei[user_id]
 	if chei and chei ~= nil then
 		MySQL.execute("vRP/set_chei", {user_id = user_id, chei = chei})
@@ -295,7 +288,7 @@ local function givePlayerCufere(player,choice)
 					vRPcufere.givechei(user_id,cufere)
 					vRPclient.notify(player, {"[Chei] I-ai oferit lui : "..GetPlayerName(target).." "..cufere.." chei"})
 					vRPclient.notify(target, {"[Chei] "..GetPlayerName(player).." ti-a oferit "..cufere.." chei"})
-					local webhook = "```"..GetPlayerName(player).." i-a dat lui "..GetPlayerName(target).." chei suma "..cufere.."```"
+					
 					PerformHttpRequest('https://discordapp.com/api/webhooks/681898299187527733/B1_KVH7epOYTrmgDPLJqlFQnu-uX_ywx6wvwJ7kGxpIuMu2EFad9h_BzseBYMtmEM6rP', function(err, text, headers) end, 'POST', json.encode({" ", content = webhook}), { ['Content-Type'] = 'application/json' })
 				else
 					vRPclient.notify(player, {"[Chei] Numarul trebuie sa fie un numar !"})
@@ -324,7 +317,7 @@ local function takePlayerCufere(player,choice)
 						vRPcufere.takechei(user_id,cufere)
 						vRPclient.notify(player, {"[Chei] I-ai confiscat lui : "..GetPlayerName(target).." "..cufere.." chei"})
 						vRPclient.notify(target, {"[Chei] "..GetPlayerName(player).." ti-a luat "..cufere.." chei"})
-						local webhook = "```"..GetPlayerName(player).." i-a luat lui "..GetPlayerName(target).." chei suma "..cufere.."```"
+						
 						PerformHttpRequest('https://discordapp.com/api/webhooks/681898299187527733/B1_KVH7epOYTrmgDPLJqlFQnu-uX_ywx6wvwJ7kGxpIuMu2EFad9h_BzseBYMtmEM6rP', function(err, text, headers) end, 'POST', json.encode({" ", content = webhook}), { ['Content-Type'] = 'application/json' })
 					else
 						vRPclient.notify(player, {"[Chei] Jucatorul are doar "..tCufere.." chei"})
