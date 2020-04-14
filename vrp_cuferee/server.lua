@@ -31,6 +31,8 @@ function displaychei(value)
 end
 
 function vRPcufere.getchei(user_id)
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = tonumber(tmpchei[user_id])
 	if chei ~= nil then
 		return tonumber(tmpchei[user_id])
@@ -40,6 +42,8 @@ function vRPcufere.getchei(user_id)
 end
 
 function vRPcufere.setchei(user_id,value)
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = tonumber(tmpchei[user_id])
 	if chei ~= nil then
 		tmpchei[user_id] = tonumber(value)
@@ -52,12 +56,16 @@ function vRPcufere.setchei(user_id,value)
 end
 
 function vRPcufere.givechei(user_id,amount)
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = vRPcufere.getchei(user_id)
 	local newchei = chei + amount
 	vRPcufere.setchei(user_id,newchei)
 end
 
 function vRPcufere.takechei(user_id,amount)
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = vRPcufere.getchei(user_id)
 	local newchei = chei - amount
 	print(newchei)
@@ -65,6 +73,8 @@ function vRPcufere.takechei(user_id,amount)
 end
 
 function vRPcufere.trycheiPayment(user_id,amount)
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = vRPcufere.getchei(user_id)
 	if chei >= amount then
 		vRPcufere.setchei(user_id,chei-amount)
@@ -75,6 +85,8 @@ function vRPcufere.trycheiPayment(user_id,amount)
 end
 
 AddEventHandler("vRP:playerJoin",function(user_id,source,name,last_login)
+		local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local cfg = getcheiConfig()
 	MySQL.execute("vRP/chei_init_user", {user_id = user_id, chei = cfg.open_chei}, function(affected)
 		MySQL.query("vRP/get_chei", {user_id = user_id}, function(rows, affected)
@@ -86,6 +98,8 @@ AddEventHandler("vRP:playerJoin",function(user_id,source,name,last_login)
 end)
 
 AddEventHandler("vRP:playerLeave",function(user_id,source)
+		local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = tmpchei[user_id]
 	if chei and chei ~= nil then
 		MySQL.execute("vRP/set_chei", {user_id = user_id, chei = chei})
@@ -109,6 +123,7 @@ end)
 
 function vRPcufere.cumparacufarbasic()
 	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local sanse = math.random(1,1000)
 	local bani = math.random(500,2500)
 	local bitcoin = math.random(1,10)
@@ -130,6 +145,7 @@ end
 
 function vRPcufere.cumparacufarepic()
 	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local sanse = math.random(1,1000)
 	local bani = math.random(10000,25000)
 	local bitcoin = math.random(10,20)
@@ -162,6 +178,7 @@ end
 
 function vRPcufere.cumparacufarlegendar()
 	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local sanse = math.random(1,2500)
 	local bani = math.random(25000,50000)
 	local bitcoin = math.random(20,30)
@@ -201,12 +218,14 @@ end
 
 function vRPcufere.vezichei()
 	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local chei = vRPcufere.getchei(user_id)
 	TriggerClientEvent('aratachei',source,chei)
 end
 
 function masina1(player)
-	local user_id = vRP.getUserId({player})
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	if user_id ~= nil then
 		vehName = "subwrx"
 		MySQL.query("vRP/get_halloween_vehicle", {user_id = user_id, vehicle = vehName}, function(pvehicle, affected)
@@ -224,7 +243,8 @@ function masina1(player)
 end
 
 function masina2(player)
-	local user_id = vRP.getUserId({player})
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	if user_id ~= nil then
 		vehName = "x6m"
 		MySQL.query("vRP/get_halloween_vehicle", {user_id = user_id, vehicle = vehName}, function(pvehicle, affected)
@@ -242,7 +262,8 @@ function masina2(player)
 end
 
 function masina3(player)
-	local user_id = vRP.getUserId({player})
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	if user_id ~= nil then
 		vehName = "a8lfsi"
 		MySQL.query("vRP/get_halloween_vehicle", {user_id = user_id, vehicle = vehName}, function(pvehicle, affected)
@@ -261,6 +282,8 @@ end
 
 local function givePlayerCufere(player,choice)
 	local id = vRP.getUserId({player})
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	vRP.prompt({player, "User ID: ", "", function(player, user_id)
 		user_id = tonumber(user_id)
 		local target = vRP.getUserSource({user_id})
@@ -285,6 +308,8 @@ local function givePlayerCufere(player,choice)
 end
 
 local function takePlayerCufere(player,choice)
+	local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local id = vRP.getUserId({player})
 	vRP.prompt({player, "User ID: ", "", function(player, user_id)
 		user_id = tonumber(user_id)
@@ -315,6 +340,8 @@ local function takePlayerCufere(player,choice)
 end
 
 vRP.registerMenuBuilder({"admin", function(add, data)
+			local user_id = vRP.getUserId({source})
+    local player = vRP.getUserSource({user_id})
 	local user_id = vRP.getUserId({data.player})
 	if user_id ~= nil then
 		local choices = {}
